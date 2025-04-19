@@ -144,4 +144,6 @@ class ITTicketController extends Controller
       return templateError($e->getMessage());
     }
   }
+
+  public function addComment() {}
 }
