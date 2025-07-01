@@ -10,7 +10,7 @@ class Category extends Model
     'name',
     'slug',
     'department',
-    'options'
+    'options' // Untuk Conditional dsb
   ];
 
   protected $casts = [

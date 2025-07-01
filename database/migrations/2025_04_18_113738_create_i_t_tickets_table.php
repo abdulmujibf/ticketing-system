@@ -18,7 +18,7 @@ return new class extends Migration
       $table->unsignedBigInteger('category_id')->nullable();
       $table->unsignedBigInteger('priority_id')->nullable();
       $table->unsignedBigInteger('status_id')->nullable();
-      $table->json('attachment_id')->nullable();
+      $table->unsignedBigInteger('department_id')->nullable();
       $table->string('title');
       $table->text('description');
       $table->json('attributes')->nullable();
@@ -32,6 +32,7 @@ return new class extends Migration
       $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
       $table->foreign('priority_id')->references('id')->on('priorities')->onDelete('cascade');
       $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
+      $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
     });
   }
 
