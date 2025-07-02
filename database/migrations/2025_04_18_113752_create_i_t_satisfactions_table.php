@@ -11,7 +11,7 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('it_satisfactions', function (Blueprint $table) {
+    Schema::create('satisfaction_tickets', function (Blueprint $table) {
       $table->id();
       $table->unsignedBigInteger('user_id');
       $table->unsignedBigInteger('ticket_id');
@@ -21,7 +21,7 @@ return new class extends Migration
       $table->timestamps();
 
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-      $table->foreign('ticket_id')->references('id')->on('it_tickets')->onDelete('cascade');
+      $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
       $table->foreign('satisfaction_id')->references('id')->on('satisfactions')->onDelete('cascade');
     });
   }
@@ -31,6 +31,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('it_satisfactions');
+    Schema::dropIfExists('satisfaction_tickets');
   }
 };

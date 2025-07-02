@@ -15,11 +15,10 @@ return new class extends Migration
       $table->id();
       $table->string('name');
       $table->string('email')->unique();
-      $table->timestamp('email_verified_at')->nullable();
       $table->string('password');
       $table->foreignId('department_id')->nullable()->index();
-      $table->string('role')->default('user');
-      $table->string('status')->default('active');
+      $table->enum('role', ['superadmin', 'admin', 'user'])->default('user');
+      $table->enum('status', ['active', 'inactive'])->default('active');
       $table->string('avatar')->nullable();
       $table->rememberToken();
       $table->timestamps();

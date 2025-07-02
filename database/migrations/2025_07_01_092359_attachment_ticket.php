@@ -12,9 +12,8 @@ return new class extends Migration
   public function up(): void
   {
     Schema::create('attachment_tickets', function (Blueprint $table) {
-      $table->foreignId('ticket_id');
-      $table->foreignId('attachment_id');
-      $table->string('department');
+      $table->foreignId('ticket_id')->index();
+      $table->foreignId('attachment_id')->index();
       $table->string('file_name')->nullable();
       $table->string('file_size')->nullable();
       $table->string('file_type')->nullable();

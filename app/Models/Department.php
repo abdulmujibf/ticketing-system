@@ -9,11 +9,17 @@ class Department extends Model
 {
   protected $fillable = [
     'name',
+    'slug',
     'description',
   ];
 
   public function tickets()
   {
-    return $this->hasMany(ITTicket::class);
+    return $this->hasMany(Ticket::class);
+  }
+
+  public function users()
+  {
+    return $this->hasMany(User::class);
   }
 }

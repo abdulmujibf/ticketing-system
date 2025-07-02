@@ -11,9 +11,9 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('it_tickets', function (Blueprint $table) {
+    Schema::create('tickets', function (Blueprint $table) {
       $table->id();
-      $table->unsignedBigInteger('user_id');
+      $table->unsignedBigInteger('creator_id');
       $table->unsignedBigInteger('assignee_id')->nullable();
       $table->unsignedBigInteger('category_id')->nullable();
       $table->unsignedBigInteger('priority_id')->nullable();
@@ -27,7 +27,7 @@ return new class extends Migration
       $table->unsignedBigInteger('response_time')->default(0);
       $table->timestamps();
 
-      $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+      $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
       $table->foreign('assignee_id')->references('id')->on('users')->onDelete('cascade');
       $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
       $table->foreign('priority_id')->references('id')->on('priorities')->onDelete('cascade');
@@ -41,6 +41,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('it_tickets');
+    Schema::dropIfExists('tickets');
   }
 };

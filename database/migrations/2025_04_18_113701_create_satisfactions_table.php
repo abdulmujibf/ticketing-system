@@ -14,7 +14,7 @@ return new class extends Migration
     Schema::create('satisfactions', function (Blueprint $table) {
       $table->id();
       $table->json('questions');
-      $table->string('department');
+      $table->foreignId('portal_id')->index();
       $table->timestamps();
     });
   }

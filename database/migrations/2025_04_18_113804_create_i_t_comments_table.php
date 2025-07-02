@@ -11,7 +11,7 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('it_comments', function (Blueprint $table) {
+    Schema::create('comment_tickets', function (Blueprint $table) {
       $table->id();
       $table->unsignedBigInteger('user_id');
       $table->unsignedBigInteger('ticket_id');
@@ -19,7 +19,7 @@ return new class extends Migration
       $table->text('comment')->nullable();
       $table->timestamps();
 
-      $table->foreign('ticket_id')->references('id')->on('it_tickets')->onDelete('cascade');
+      $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
       $table->foreign('attachment_id')->references('id')->on('attachments')->onDelete('cascade');
     });
@@ -30,6 +30,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('it_comments');
+    Schema::dropIfExists('comment_tickets');
   }
 };

@@ -11,12 +11,11 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('statuses', function (Blueprint $table) {
+    Schema::create('ticket_field_values', function (Blueprint $table) {
       $table->id();
-      $table->string('name');
-      $table->string('slug')->unique();
-      $table->foreignId('portal_id')->index();
-      $table->json('options')->nullable();
+      $table->foreignId('ticket_id')->constrained()->onDelete('cascade');
+      $table->foreignId('portal_field_id')->constrained()->onDelete('cascade');
+      $table->text('value');
       $table->timestamps();
     });
   }
@@ -26,6 +25,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('statuses');
+    Schema::dropIfExists('ticket_field_values');
   }
 };

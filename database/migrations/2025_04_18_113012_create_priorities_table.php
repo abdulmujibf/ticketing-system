@@ -14,8 +14,8 @@ return new class extends Migration
     Schema::create('priorities', function (Blueprint $table) {
       $table->id();
       $table->string('name');
-      $table->string('slug');
-      $table->string('department');
+      $table->string('slug')->unique();
+      $table->foreignId('portal_id')->index();
       $table->json('options')->nullable();
       $table->timestamps();
     });

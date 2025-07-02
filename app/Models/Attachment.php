@@ -12,4 +12,14 @@ class Attachment extends Model
     'file_type',
     'file_location',
   ];
+
+  public function attachmentTickets()
+  {
+    return $this->hasMany(AttachmentTicket::class, 'attachment_id');
+  }
+
+  public function comments()
+  {
+    return $this->hasMany(CommentTicket::class, 'attachment_id');
+  }
 }

@@ -10,10 +10,21 @@ class Category extends Model
     'name',
     'slug',
     'department',
+    'portal_id',
     'options' // Untuk Conditional dsb
   ];
 
   protected $casts = [
     'options' => 'array'
   ];
+
+  public function tickets()
+  {
+    return $this->hasMany(Ticket::class);
+  }
+
+  public function portal()
+  {
+    return $this->belongsTo(Portal::class);
+  }
 }
