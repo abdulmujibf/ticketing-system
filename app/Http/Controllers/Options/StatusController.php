@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Options;
 
 use App\Http\Controllers\Controller;
+use App\Models\Portal;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Exception;
@@ -10,12 +11,18 @@ use Illuminate\Support\Str;
 
 class StatusController extends Controller
 {
-  public function getByDepartment(Request $req)
+  public function getByPortal(Request $req)
   {
     try {
-      $department = $req->get('department', '');
+      $portal = $req->get('portal', '');
 
-      $statuses = Status::where('department', $department)->get();
+      $MPortal = Portal::where('slug', $portal)->first();
+
+      if (!$MPortal) {
+        return templateError('Portal not found', 404);
+      }
+
+      $statuses = Status::where('portal_id', $MPortal->id)->get();
 
       if (!$statuses) {
         return templateError('Status not found', 404);
@@ -49,17 +56,19 @@ class StatusController extends Controller
     try {
       $name = $req->input('name', '');
       $slug = $req->input('slug', '');
-      $department = $req->input('department', '');
+      $portal = $req->input('portal', '');
       $options = $req->input('options', []);
 
-      if (!$name || !$department) {
-        return templateError('Name and Department can\'t be empty', 404);
+      if (!$name || !$portal) {
+        return templateError('Name and Portal can\'t be empty', 404);
       }
+
+      $MPortal = Portal::where('slug', $portal)->first();
 
       $newStatus = Status::create([
         'name' => $name,
         'slug' => $slug ? Str::slug($slug) : Str::slug($name),
-        'department' => Str::slug($department),
+        'portal_id' => $MPortal->id,
         'options' => $options
       ]);
 

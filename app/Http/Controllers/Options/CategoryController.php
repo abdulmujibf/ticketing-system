@@ -5,19 +5,26 @@ namespace App\Http\Controllers\Options;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Portal;
 use Exception;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-  public function getByDepartment(Request $req)
+  public function getByPortal(Request $req)
   {
     try {
-      $department = $req->get('department', '');
+      $portal = $req->get('portal', '');
 
-      $categories = Category::where('department', $department)->get();
+      $MPortal = Portal::where('slug', $portal)->first();
 
-      if (!$categories) {
+      if (!$MPortal) {
+        return templateError('Portal not found', 404);
+      }
+
+      $categories = Category::where('portal_id', $MPortal->id)->get();
+
+      if (empty($categories)) {
         return templateError('Category not found', 404);
       }
 
@@ -49,17 +56,19 @@ class CategoryController extends Controller
     try {
       $name = $req->input('name', '');
       $slug = $req->input('slug', '');
-      $department = $req->input('department', '');
+      $portal = $req->input('portal', '');
       $options = $req->input('options', []);
 
-      if (!$name || !$department) {
-        return templateError('Name and Department can\'t be empty', 404);
+      if (!$name || !$portal) {
+        return templateError('Name and Portal can\'t be empty', 404);
       }
+
+      $MPortal = Portal::where('slug', $portal)->first();
 
       $newCategory = Category::create([
         'name' => $name,
         'slug' => $slug ? Str::slug($slug) : Str::slug($name),
-        'department' => Str::slug($department),
+        'portal_id' => $MPortal->id,
         'options' => $options
       ]);
 
@@ -74,7 +83,6 @@ class CategoryController extends Controller
     try {
       $name = $req->input('name', '');
       $slug = $req->input('slug', '');
-      $department = $req->input('department', '');
       $options = $req->input('options', []);
 
       $categories = Category::find($id);
@@ -86,9 +94,6 @@ class CategoryController extends Controller
       if ($name) {
         $categories->name = $name;
         $categories->slug = $slug ? Str::slug($slug) : Str::slug($name);
-      }
-      if ($department) {
-        $categories->department = Str::slug($department);
       }
       if ($options && count($options)) {
         $categories->options = $options;

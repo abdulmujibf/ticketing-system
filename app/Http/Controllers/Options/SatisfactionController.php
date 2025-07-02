@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Options;
 
 use App\Http\Controllers\Controller;
+use App\Models\Portal;
 use App\Models\Satisfaction;
 use Exception;
 use Illuminate\Http\Request;
@@ -10,12 +11,18 @@ use Illuminate\Support\Str;
 
 class SatisfactionController extends Controller
 {
-  public function getByDepartment(Request $req)
+  public function getByPortal(Request $req)
   {
     try {
-      $department = $req->get('department');
+      $portal = $req->get('portal');
 
-      $satisfactions = Satisfaction::where('department', $department)->get();
+      $MPortal = Portal::where('slug', $portal)->first();
+
+      if (!$MPortal) {
+        return templateError('Portal not found', 404);
+      }
+
+      $satisfactions = Satisfaction::where('portal_id', $MPortal->id)->get();
 
       if (!$satisfactions) {
         return templateError('Satisfaction question not found');
@@ -31,10 +38,11 @@ class SatisfactionController extends Controller
   {
     try {
       $questions = $req->input('questions');
+      $portal = Portal::where('slug', $req->input('portal'))->first();
 
       $newSatisfaction = Satisfaction::create([
         'questions' => $questions,
-        'department' => Str::slug($req->input('department'))
+        'portal_id' => $portal->id
       ]);
 
       if (!$newSatisfaction) {
@@ -51,7 +59,6 @@ class SatisfactionController extends Controller
   {
     try {
       $questions = $req->input('questions');
-      $department = $req->input('department');
 
       $satisfactions = Satisfaction::find($id);
 
@@ -59,14 +66,9 @@ class SatisfactionController extends Controller
         return templateError('Satisfaction question not found');
       }
 
-      if ($department) {
-        $satisfactions->department = Str::slug($department);
-      }
-
       if ($questions && count($questions)) {
         $satisfactions->questions = $questions;
       }
-
 
       saveIsDirty($satisfactions);
 
